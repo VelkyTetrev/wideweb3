@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>wideweb3.com — Logo v3</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    background: #0a0d1a;
+    min-height: 100vh;
+  }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; }
+
+  .panel {
+    padding: 80px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 360px;
+  }
+
+  .panel-dark  { background: #080c14; }
+  .panel-dark2 { background: #0d1520; }
+  .panel-light { background: #f5f7fa; }
+  .panel-white { background: #ffffff; }
+
+  .label {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: -24px;
+  }
+  .ld { color: rgba(255,255,255,0.22); }
+  .ll { color: rgba(0,0,0,0.22); }
+
+  .logo-full {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .wm-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .wordmark {
+    display: flex;
+    align-items: baseline;
+    line-height: 1;
+  }
+
+  .wm-wide { font-weight: 200; font-size: 42px; letter-spacing: -1.5px; }
+  .wm-web3 { font-weight: 500; font-size: 42px; letter-spacing: -1.5px; }
+  .wm-com  { font-weight: 200; font-size: 42px; letter-spacing: -1.5px; opacity: 0.3; }
+
+  .wm-tag {
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    opacity: 0.4;
+    padding-left: 2px;
+    white-space: nowrap;
+  }
+
+  /* dark variant */
+  .wm-dark .wm-wide { color: #e8f2f8; }
+  .wm-dark .wm-web3 { color: #00d4ff; }
+  .wm-dark .wm-com  { color: #e8f2f8; }
+  .wm-dark .wm-tag  { color: #e8f2f8; }
+
+  /* light variant */
+  .wm-light .wm-wide { color: #1a1a2e; }
+  .wm-light .wm-web3 { color: #007aaa; }
+  .wm-light .wm-com  { color: #1a1a2e; }
+  .wm-light .wm-tag  { color: #1a1a2e; }
+
+  /* divider */
+  .div { grid-column: span 2; height: 1px; background: rgba(255,255,255,0.05); }
+  .div-light { background: rgba(0,0,0,0.06); }
+
+  /* palette strip */
+  .strip {
+    grid-column: span 2;
+    background: #060910;
+    padding: 52px 64px;
+    display: flex;
+    gap: 64px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .sw-row { display: flex; gap: 14px; align-items: center; }
+  .sw { width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0; }
+  .sw-name { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.55); letter-spacing:.5px; }
+  .sw-hex  { font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.25); }
+
+  /* sizes row */
+  .sizes {
+    display: flex;
+    gap: 32px;
+    align-items: flex-end;
+  }
+  .sz-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .sz-label {
+    font-size: 10px;
+    color: rgba(0,0,0,0.25);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="grid">
+
+  <!-- ══════════════════════════════════════════
+       DARK — PRIMARY LOCKUP
+  ══════════════════════════════════════════ -->
+  <div class="panel panel-dark">
+    <span class="label ld">Primary — Dark</span>
+    <div class="logo-full">
+
+      <svg width="74" height="74" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="a-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1c2238"/>
+            <stop offset="100%" stop-color="#090c18"/>
+          </linearGradient>
+          <linearGradient id="a-arrow" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#0099cc"/>
+            <stop offset="100%" stop-color="#66e0ff"/>
+          </linearGradient>
+          <linearGradient id="a-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(160,220,245,0.8)"/>
+            <stop offset="100%" stop-color="rgba(80,160,200,0.3)"/>
+          </linearGradient>
+          <filter id="a-glow">
+            <feGaussianBlur stdDeviation="3.5" result="cb"/>
+            <feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="a-arrow-glow">
+            <feGaussianBlur stdDeviation="4" result="cb"/>
+            <feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <clipPath id="a-clip"><rect x="0" y="0" width="180" height="180" rx="42"/></clipPath>
+        </defs>
+
+        <!-- bg -->
+        <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#a-bg)"/>
+        <rect x="0" y="0" width="180" height="90" rx="42" fill="rgba(255,255,255,0.025)"/>
+        <rect x="0" y="0" width="180" height="180" rx="42" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+
+        <!-- Globe grid — subtle wireframe -->
+
+        <!-- Globe outer ring -->
+        <circle cx="90" cy="90" r="56" fill="none" stroke="url(#a-ring)" stroke-width="2.5" filter="url(#a-glow)"/>
+
+        <!-- Arrow shaft -->
+        <line x1="90" y1="132" x2="90" y2="60"
+              stroke="url(#a-arrow)" stroke-width="7.5"
+              stroke-linecap="round" filter="url(#a-arrow-glow)"/>
+
+        <!-- Arrow head — clean triangle -->
+        <polygon points="90,34 72,66 108,66"
+                 fill="url(#a-arrow)" filter="url(#a-arrow-glow)"/>
+
+      </svg>
+
+      <div class="wm-stack wm-dark">
+        <div class="wordmark">
+          <span class="wm-wide">wide</span><span class="wm-web3">web3</span><span class="wm-com">.com</span>
+        </div>
+        <span class="wm-tag">YOUR ONCHAIN BUSINESS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ICON STANDALONE LARGE
+  ══════════════════════════════════════════ -->
+  <div class="panel panel-dark2" style="align-items:center; justify-content:center;">
+    <span class="label ld" style="align-self:flex-start">Icon — Standalone</span>
+    <svg width="136" height="136" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="b-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1c2238"/>
+          <stop offset="100%" stop-color="#090c18"/>
+        </linearGradient>
+        <linearGradient id="b-arrow" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#0099cc"/>
+          <stop offset="100%" stop-color="#66e0ff"/>
+        </linearGradient>
+        <linearGradient id="b-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="rgba(160,220,245,0.8)"/>
+          <stop offset="100%" stop-color="rgba(80,160,200,0.3)"/>
+        </linearGradient>
+        <filter id="b-glow">
+          <feGaussianBlur stdDeviation="4" result="cb"/>
+          <feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="b-ag">
+          <feGaussianBlur stdDeviation="5" result="cb"/>
+          <feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <clipPath id="b-clip"><rect x="0" y="0" width="180" height="180" rx="42"/></clipPath>
+      </defs>
+      <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#b-bg)"/>
+      <rect x="0" y="0" width="180" height="90" rx="42" fill="rgba(255,255,255,0.025)"/>
+      <rect x="0" y="0" width="180" height="180" rx="42" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+      <circle cx="90" cy="90" r="56" fill="none" stroke="url(#b-ring)" stroke-width="2.5" filter="url(#b-glow)"/>
+      <line x1="90" y1="132" x2="90" y2="60" stroke="url(#b-arrow)" stroke-width="8" stroke-linecap="round" filter="url(#b-ag)"/>
+      <polygon points="90,34 72,66 108,66" fill="url(#b-arrow)" filter="url(#b-ag)"/>
+    </svg>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- ══════════════════════════════════════════
+       LIGHT — PRIMARY LOCKUP
+  ══════════════════════════════════════════ -->
+  <div class="panel panel-white">
+    <span class="label ll">Primary — Light</span>
+    <div class="logo-full">
+      <svg width="74" height="74" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="c-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#eef4f8"/>
+            <stop offset="100%" stop-color="#dde8f0"/>
+          </linearGradient>
+          <linearGradient id="c-arrow" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#006699"/>
+            <stop offset="100%" stop-color="#00aadd"/>
+          </linearGradient>
+          <filter id="c-ag">
+            <feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#0099cc" flood-opacity="0.25"/>
+          </filter>
+          <clipPath id="c-clip"><rect x="0" y="0" width="180" height="180" rx="42"/></clipPath>
+        </defs>
+        <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#c-bg)" stroke="rgba(0,0,0,0.07)" stroke-width="1"/>
+        <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(0,100,150,0.3)" stroke-width="2"/>
+        <line x1="90" y1="132" x2="90" y2="60" stroke="url(#c-arrow)" stroke-width="7.5" stroke-linecap="round" filter="url(#c-ag)"/>
+        <polygon points="90,34 72,66 108,66" fill="url(#c-arrow)" filter="url(#c-ag)"/>
+      </svg>
+      <div class="wm-stack wm-light">
+        <div class="wordmark">
+          <span class="wm-wide">wide</span><span class="wm-web3">web3</span><span class="wm-com">.com</span>
+        </div>
+        <span class="wm-tag">YOUR ONCHAIN BUSINESS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ICON SIZES
+  ══════════════════════════════════════════ -->
+  <div class="panel panel-light">
+    <span class="label ll">Scale</span>
+    <div class="sizes">
+
+      <!-- 96 -->
+      <div class="sz-item">
+        <svg width="96" height="96" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="d1bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient>
+            <linearGradient id="d1ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient>
+            <filter id="d1g"><feGaussianBlur stdDeviation="3" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <clipPath id="d1c"><rect x="0" y="0" width="180" height="180" rx="42"/></clipPath>
+          </defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#d1bg)"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.55)" stroke-width="2.5" filter="url(#d1g)"/>
+          <line x1="90" y1="132" x2="90" y2="60" stroke="url(#d1ar)" stroke-width="8" stroke-linecap="round" filter="url(#d1g)"/>
+          <polygon points="90,34 72,66 108,66" fill="url(#d1ar)" filter="url(#d1g)"/>
+        </svg>
+        <span class="sz-label">96px</span>
+      </div>
+
+      <!-- 52 -->
+      <div class="sz-item">
+        <svg width="52" height="52" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="d2bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient>
+            <linearGradient id="d2ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient>
+            <clipPath id="d2c"><rect x="0" y="0" width="180" height="180" rx="42"/></clipPath>
+          </defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#d2bg)"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.5)" stroke-width="3"/>
+          <line x1="90" y1="130" x2="90" y2="60" stroke="url(#d2ar)" stroke-width="10" stroke-linecap="round"/>
+          <polygon points="90,34 70,66 110,66" fill="url(#d2ar)"/>
+        </svg>
+        <span class="sz-label">52px</span>
+      </div>
+
+      <!-- 32 -->
+      <div class="sz-item">
+        <svg width="32" height="32" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="d3bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient>
+            <linearGradient id="d3ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient>
+          </defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#d3bg)"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.45)" stroke-width="4"/>
+          <line x1="90" y1="128" x2="90" y2="58" stroke="url(#d3ar)" stroke-width="14" stroke-linecap="round"/>
+          <polygon points="90,30 66,70 114,70" fill="url(#d3ar)"/>
+        </svg>
+        <span class="sz-label">32px</span>
+      </div>
+
+      <!-- 20 -->
+      <div class="sz-item">
+        <svg width="20" height="20" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="d4bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient>
+            <linearGradient id="d4ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient>
+          </defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#d4bg)"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.45)" stroke-width="6"/>
+          <line x1="90" y1="126" x2="90" y2="56" stroke="url(#d4ar)" stroke-width="18" stroke-linecap="round"/>
+          <polygon points="90,26 62,72 118,72" fill="url(#d4ar)"/>
+        </svg>
+        <span class="sz-label">20px</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="div div-light"></div>
+
+  <!-- LIGHT ICON STANDALONE -->
+  <div class="panel panel-white" style="align-items:center; justify-content:center;">
+    <span class="label ll" style="align-self:flex-start">Icon — Light</span>
+    <svg width="136" height="136" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="li-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4f8"/><stop offset="100%" stop-color="#d8e8f2"/></linearGradient>
+        <linearGradient id="li-ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#006699"/><stop offset="100%" stop-color="#00aadd"/></linearGradient>
+        <filter id="li-ag"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0099cc" flood-opacity="0.18"/></filter>
+      </defs>
+      <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#li-bg)" stroke="rgba(0,0,0,0.06)" stroke-width="1.5"/>
+      <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(0,100,150,0.22)" stroke-width="2.5"/>
+      <line x1="90" y1="132" x2="90" y2="60" stroke="url(#li-ar)" stroke-width="8" stroke-linecap="round" filter="url(#li-ag)"/>
+      <polygon points="90,34 72,66 108,66" fill="url(#li-ar)" filter="url(#li-ag)"/>
+    </svg>
+  </div>
+
+  <!-- LIGHT ICON SIZES -->
+  <div class="panel panel-light">
+    <span class="label ll">Icon Light — Scale</span>
+    <div class="sizes">
+      <div class="sz-item">
+        <svg width="96" height="96" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ls1bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4f8"/><stop offset="100%" stop-color="#d8e8f2"/></linearGradient><linearGradient id="ls1ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#006699"/><stop offset="100%" stop-color="#00aadd"/></linearGradient></defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#ls1bg)" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(0,100,150,0.22)" stroke-width="2.5"/>
+          <line x1="90" y1="132" x2="90" y2="60" stroke="url(#ls1ar)" stroke-width="8" stroke-linecap="round"/>
+          <polygon points="90,34 72,66 108,66" fill="url(#ls1ar)"/>
+        </svg>
+        <span class="sz-label">96px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="52" height="52" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ls2bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4f8"/><stop offset="100%" stop-color="#d8e8f2"/></linearGradient><linearGradient id="ls2ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#006699"/><stop offset="100%" stop-color="#00aadd"/></linearGradient></defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#ls2bg)" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(0,100,150,0.22)" stroke-width="3"/>
+          <line x1="90" y1="130" x2="90" y2="60" stroke="url(#ls2ar)" stroke-width="10" stroke-linecap="round"/>
+          <polygon points="90,34 70,66 110,66" fill="url(#ls2ar)"/>
+        </svg>
+        <span class="sz-label">52px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="32" height="32" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ls3bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4f8"/><stop offset="100%" stop-color="#d8e8f2"/></linearGradient><linearGradient id="ls3ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#006699"/><stop offset="100%" stop-color="#00aadd"/></linearGradient></defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#ls3bg)" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(0,100,150,0.22)" stroke-width="4"/>
+          <line x1="90" y1="128" x2="90" y2="58" stroke="url(#ls3ar)" stroke-width="14" stroke-linecap="round"/>
+          <polygon points="90,30 66,70 114,70" fill="url(#ls3ar)"/>
+        </svg>
+        <span class="sz-label">32px</span>
+      </div>
+      <div class="sz-item">
+        <svg width="20" height="20" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ls4bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4f8"/><stop offset="100%" stop-color="#d8e8f2"/></linearGradient><linearGradient id="ls4ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#006699"/><stop offset="100%" stop-color="#00aadd"/></linearGradient></defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#ls4bg)" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(0,100,150,0.22)" stroke-width="6"/>
+          <line x1="90" y1="126" x2="90" y2="56" stroke="url(#ls4ar)" stroke-width="18" stroke-linecap="round"/>
+          <polygon points="90,26 62,72 118,72" fill="url(#ls4ar)"/>
+        </svg>
+        <span class="sz-label">20px</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- USAGE: Favicon -->
+  <div class="panel panel-dark" style="gap:28px;">
+    <span class="label ld">Favicon / Browser Tab</span>
+    <div style="display:flex;flex-direction:column;gap:0;width:240px;">
+      <div style="display:flex;align-items:center;gap:0;background:#2a2d36;border-radius:8px 8px 0 0;padding:9px 16px;">
+        <svg width="14" height="14" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="margin-right:7px;flex-shrink:0">
+          <defs><linearGradient id="fv-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient><linearGradient id="fv-ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient></defs>
+          <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#fv-bg)"/>
+          <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.5)" stroke-width="6"/>
+          <line x1="90" y1="126" x2="90" y2="56" stroke="url(#fv-ar)" stroke-width="18" stroke-linecap="round"/>
+          <polygon points="90,26 62,72 118,72" fill="url(#fv-ar)"/>
+        </svg>
+        <span style="font-size:12px;color:rgba(255,255,255,0.65);font-family:'Inter',sans-serif;font-weight:300;">wideweb3.com</span>
+      </div>
+      <div style="background:#1e2128;border-radius:0 0 8px 8px;height:56px;border-top:1px solid rgba(255,255,255,0.04);"></div>
+    </div>
+  </div>
+
+  <!-- USAGE: App icon iOS -->
+  <div class="panel panel-dark2" style="align-items:center;justify-content:center;">
+    <span class="label ld" style="align-self:flex-start">App Icon — iOS</span>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <svg width="76" height="76" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="border-radius:17px;box-shadow:0 8px 32px rgba(0,0,0,0.55)">
+        <defs><linearGradient id="ios-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient><linearGradient id="ios-ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient><filter id="ios-g"><feGaussianBlur stdDeviation="4" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <rect x="0" y="0" width="180" height="180" fill="url(#ios-bg)"/>
+        <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.5)" stroke-width="2.5" filter="url(#ios-g)"/>
+        <line x1="90" y1="132" x2="90" y2="60" stroke="url(#ios-ar)" stroke-width="8" stroke-linecap="round" filter="url(#ios-g)"/>
+        <polygon points="90,34 72,66 108,66" fill="url(#ios-ar)" filter="url(#ios-g)"/>
+      </svg>
+      <span style="font-size:11px;color:rgba(255,255,255,0.4);font-family:'Inter',sans-serif;font-weight:300;letter-spacing:0.5px">wideweb3</span>
+    </div>
+  </div>
+
+  <div class="div div-light"></div>
+
+  <!-- USAGE: Email signature -->
+  <div class="panel panel-white" style="grid-column:span 2;min-height:auto;padding:52px 64px;">
+    <span class="label ll">Email Signature</span>
+    <div style="margin-top:8px;padding:28px 32px;background:#f9fafb;border-radius:12px;border:1px solid rgba(0,0,0,0.06);display:inline-flex;align-items:center;gap:24px;">
+      <svg width="44" height="44" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="em-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient><linearGradient id="em-ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient></defs>
+        <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#em-bg)"/>
+        <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.45)" stroke-width="3"/>
+        <line x1="90" y1="132" x2="90" y2="60" stroke="url(#em-ar)" stroke-width="10" stroke-linecap="round"/>
+        <polygon points="90,34 70,66 110,66" fill="url(#em-ar)"/>
+      </svg>
+      <div style="border-left:1px solid rgba(0,0,0,0.08);padding-left:24px;">
+        <p style="font-family:'Inter',sans-serif;font-size:15px;font-weight:500;color:#1a1a2e;letter-spacing:-0.3px;">Jan Novák</p>
+        <p style="font-family:'Inter',sans-serif;font-size:12px;font-weight:300;color:rgba(0,0,0,0.4);margin-top:2px;">CEO · wideweb3.com</p>
+        <p style="font-family:'Inter',sans-serif;font-size:10px;font-weight:400;color:#0099cc;margin-top:8px;letter-spacing:2px;text-transform:uppercase;">YOUR ONCHAIN BUSINESS</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="div div-light"></div>
+
+  <!-- ══════════════════════════════════════════
+       WEB USAGE — NAVBAR
+  ══════════════════════════════════════════ -->
+  <div class="panel panel-white" style="grid-column:span 2; min-height:auto; padding:52px 64px; gap:20px;">
+    <span class="label ll" style="margin-bottom:0;">Web — Navigation Bar</span>
+    <!-- Simulated navbar -->
+    <div style="width:100%;max-width:800px;background:#ffffff;border:1px solid rgba(0,0,0,0.07);border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.06);">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 28px;border-bottom:1px solid rgba(0,0,0,0.05);gap:16px;">
+        <!-- Client brand placeholder -->
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:#e8e8e8;border-radius:8px;flex-shrink:0;"></div>
+          <span style="font-family:'Inter',sans-serif;font-size:15px;font-weight:500;color:#1a1a2e;letter-spacing:-0.3px;white-space:nowrap;">AcmeCorp</span>
+        </div>
+        <!-- Nav links -->
+        <div style="display:flex;gap:24px;justify-content:center;">
+          <span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:300;color:rgba(0,0,0,0.4);white-space:nowrap;">O nás</span>
+          <span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:300;color:rgba(0,0,0,0.4);white-space:nowrap;">Produkty</span>
+          <span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:300;color:rgba(0,0,0,0.4);white-space:nowrap;">Kontakt</span>
+        </div>
+        <!-- wideweb3 badge in nav -->
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="display:flex;align-items:center;gap:7px;background:#f0f6fa;border:1px solid rgba(0,150,200,0.15);border-radius:20px;padding:5px 12px 5px 7px;">
+            <svg width="18" height="18" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="nv-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient><linearGradient id="nv-ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient></defs>
+              <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#nv-bg)"/>
+              <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.5)" stroke-width="6"/>
+              <line x1="90" y1="126" x2="90" y2="56" stroke="url(#nv-ar)" stroke-width="18" stroke-linecap="round"/>
+              <polygon points="90,26 62,72 118,72" fill="url(#nv-ar)"/>
+            </svg>
+            <span style="font-family:'Inter',sans-serif;font-size:11px;font-weight:400;color:#007aaa;letter-spacing:0.2px;white-space:nowrap;">wideweb3</span>
+          </div>
+        </div>
+      </div>
+      <div style="height:48px;background:#fafafa;"></div>
+    </div>
+  </div>
+
+  <div class="div div-light"></div>
+
+  <!-- ══════════════════════════════════════════
+       WEB USAGE — FOOTER BADGE
+  ══════════════════════════════════════════ -->
+  <div class="panel panel-dark" style="grid-column:span 2; min-height:auto; padding:52px 64px; gap:20px;">
+    <span class="label ld" style="margin-bottom:0;">Web — Footer Badge</span>
+    <p style="font-family:'Inter',sans-serif;font-size:11px;font-weight:300;color:rgba(255,255,255,0.28);letter-spacing:1px;margin-top:-8px;">Stejně jako firmy uvádějí profil na LinkedIn nebo platbu přes Stripe — wideweb3 badge ve footeru signalizuje, že firma je součástí digitální ekonomiky.</p>
+
+    <!-- Simulated footer -->
+    <div style="width:100%;max-width:800px;background:#0f1219;border-radius:12px;padding:32px 36px;border:1px solid rgba(255,255,255,0.05);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;">
+        <!-- Client info -->
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:28px;height:28px;background:#2a2d36;border-radius:6px;"></div>
+            <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);">AcmeCorp s.r.o.</span>
+          </div>
+          <p style="font-family:'Inter',sans-serif;font-size:11px;font-weight:300;color:rgba(255,255,255,0.25);letter-spacing:0.3px;">© 2026 AcmeCorp. Všechna práva vyhrazena.</p>
+        </div>
+
+        <!-- wideweb3 footer badge — dark -->
+        <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(0,180,230,0.15);border-radius:10px;padding:10px 16px;">
+          <svg width="24" height="24" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="ft-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c2238"/><stop offset="100%" stop-color="#090c18"/></linearGradient><linearGradient id="ft-ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#0099cc"/><stop offset="100%" stop-color="#66e0ff"/></linearGradient></defs>
+            <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#ft-bg)"/>
+            <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(160,220,245,0.45)" stroke-width="5"/>
+            <line x1="90" y1="126" x2="90" y2="56" stroke="url(#ft-ar)" stroke-width="16" stroke-linecap="round"/>
+            <polygon points="90,26 64,72 116,72" fill="url(#ft-ar)"/>
+          </svg>
+          <div>
+            <p style="font-family:'Inter',sans-serif;font-size:9px;font-weight:300;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;">JSME ONCHAIN</p>
+            <p style="font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:#00d4ff;letter-spacing:-0.2px;">wideweb3.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Light footer variant -->
+    <div style="width:100%;max-width:800px;background:#f5f7fa;border-radius:12px;padding:32px 36px;border:1px solid rgba(0,0,0,0.06);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:28px;height:28px;background:#e0e4ea;border-radius:6px;"></div>
+            <span style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#1a1a2e;">AcmeCorp s.r.o.</span>
+          </div>
+          <p style="font-family:'Inter',sans-serif;font-size:11px;font-weight:300;color:rgba(0,0,0,0.3);">© 2026 AcmeCorp. Všechna práva vyhrazena.</p>
+        </div>
+        <!-- wideweb3 footer badge — light -->
+        <div style="display:flex;align-items:center;gap:10px;background:#ffffff;border:1px solid rgba(0,150,200,0.18);border-radius:10px;padding:10px 16px;box-shadow:0 1px 6px rgba(0,0,0,0.05);">
+          <svg width="24" height="24" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="ftl-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#eef4f8"/><stop offset="100%" stop-color="#d8e8f2"/></linearGradient><linearGradient id="ftl-ar" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#006699"/><stop offset="100%" stop-color="#00aadd"/></linearGradient></defs>
+            <rect x="0" y="0" width="180" height="180" rx="42" fill="url(#ftl-bg)" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+            <circle cx="90" cy="90" r="56" fill="none" stroke="rgba(0,100,150,0.22)" stroke-width="5"/>
+            <line x1="90" y1="126" x2="90" y2="56" stroke="url(#ftl-ar)" stroke-width="16" stroke-linecap="round"/>
+            <polygon points="90,26 64,72 116,72" fill="url(#ftl-ar)"/>
+          </svg>
+          <div>
+            <p style="font-family:'Inter',sans-serif;font-size:9px;font-weight:300;color:rgba(0,0,0,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;">JSME ONCHAIN</p>
+            <p style="font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:#007aaa;letter-spacing:-0.2px;">wideweb3.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- ══════════════════════════════════════════
+       PALETTE + TAGLINE
+  ══════════════════════════════════════════ -->
+  <div class="strip">
+    <div>
+      <p style="font-size:10px;letter-spacing:2.5px;color:rgba(255,255,255,0.22);text-transform:uppercase;margin-bottom:22px">Palette</p>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <div class="sw-row"><div class="sw" style="background:#66e0ff"></div><div><div class="sw-name">Sky Cyan</div><div class="sw-hex">#66E0FF</div></div></div>
+        <div class="sw-row"><div class="sw" style="background:#00d4ff"></div><div><div class="sw-name">Electric Blue</div><div class="sw-hex">#00D4FF</div></div></div>
+        <div class="sw-row"><div class="sw" style="background:#0099cc"></div><div><div class="sw-name">Ocean</div><div class="sw-hex">#0099CC</div></div></div>
+        <div class="sw-row"><div class="sw" style="background:#1c2238"></div><div><div class="sw-name">Deep Navy</div><div class="sw-hex">#1C2238</div></div></div>
+        <div class="sw-row"><div class="sw" style="background:#090c18"></div><div><div class="sw-name">Abyss</div><div class="sw-hex">#090C18</div></div></div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:10px;letter-spacing:2.5px;color:rgba(255,255,255,0.22);text-transform:uppercase;margin-bottom:14px">Tagline</p>
+      <p style="font-size:15px;font-weight:200;color:rgba(255,255,255,0.7);letter-spacing:2px;text-transform:uppercase">YOUR ONCHAIN BUSINESS</p>
+      <p style="font-size:11px;font-weight:300;color:rgba(255,255,255,0.22);letter-spacing:1px;margin-top:8px">Inter · Weight 200–500 · #1C2238 / #00D4FF</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
