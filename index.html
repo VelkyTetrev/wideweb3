@@ -368,10 +368,11 @@
   @media (max-width: 700px) {
     .stairs {
       height: auto;
-      gap: 8px;
+      gap: 10px 8px;
       flex-wrap: wrap;
       justify-content: center;
       padding-bottom: 20px;
+      padding-top: 10px;
     }
     .stair {
       flex: 0 0 calc(25% - 8px);
@@ -385,7 +386,8 @@
     .stair-ico { width: 20px; height: 20px; }
     .stair-num { font-size: 0.65rem; }
     .stair-label { font-size: 0.55rem; }
-    .stair-phase { font-size: 0.55rem; }
+    .stair-phase { display: none; }
+    .stair-crown { display: none; }
   }
 
   /* ═══ WORKFLOW ═══ */
