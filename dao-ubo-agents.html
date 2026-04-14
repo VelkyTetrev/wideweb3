@@ -182,33 +182,33 @@ const T0=performance.now();
 (function loop(){
   requestAnimationFrame(loop);
   const t=(performance.now()-T0)*.001;
-  const ct=t%20;
+  const ct=t%17;
 
   // Particle fade
   let pFade;
-  if(ct<12) pFade=1;
-  else if(ct<13.5) pFade=1-easeOut((ct-12)/1.5);
-  else if(ct<18.5) pFade=0;
-  else pFade=easeOut((ct-18.5)/1.5);
+  if(ct<10) pFade=1;
+  else if(ct<11) pFade=1-easeOut((ct-10)/1);
+  else if(ct<16) pFade=0;
+  else pFade=easeOut((ct-16)/1);
   ptMat.uniforms.uFade.value=pFade;
   hMat.uniforms.uFade.value=pFade;
 
   // Orbital streaks: visible during hold (7-13.5)
   let orbFade;
   if(ct<7) orbFade=easeOut(Math.max(0,(ct-5)/2)); // start fading in from 5s
-  else if(ct<12) orbFade=1;
-  else if(ct<13.5) orbFade=1-easeOut((ct-12)/1.5);
+  else if(ct<10) orbFade=1;
+  else if(ct<11) orbFade=1-easeOut((ct-10)/1);
   else orbFade=0;
   orbMat.uniforms.uFade.value=orbFade;
 
   // Robot: 13.5-18.5
-  if(ct>14&&ct<18.5){
-    const rp=easeOut(Math.min((ct-14)/1.5,1));
+  if(ct>11.5&&ct<16){
+    const rp=easeOut(Math.min((ct-11.5)/1.2,1));
     robotEl.style.opacity=rp;
     robotEl.style.transform='translate(-50%,-50%) scale('+(0.3+0.7*rp)+')';
     robotEl.style.filter='drop-shadow(0 0 '+Math.round(15*rp)+'px rgba(255,255,255,'+(.12*rp).toFixed(2)+'))';
-  }else if(ct>=18.5&&ct<20){
-    const fo=1-easeOut((ct-18.5)/1);
+  }else if(ct>=16&&ct<17){
+    const fo=1-easeOut((ct-16)/1);
     robotEl.style.opacity=Math.max(0,fo);
   }else{
     robotEl.style.opacity='0';
