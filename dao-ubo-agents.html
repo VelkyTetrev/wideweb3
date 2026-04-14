@@ -3,29 +3,30 @@
 <title>DAO UBO — AI Agents</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#050508;overflow:hidden;height:100vh}
+body{background:#030305;overflow:hidden;height:100vh}
 #W{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-  aspect-ratio:16/9;max-width:100vw;max-height:100vh;width:100vw;background:#050508;overflow:hidden}
+  aspect-ratio:16/9;max-width:100vw;max-height:100vh;width:100vw;background:#030305;overflow:hidden}
 canvas{display:block;width:100%;height:100%}
 #robot{
-  position:absolute;top:0;left:0;width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  z-index:10;opacity:0;transition:opacity 2.5s ease;
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(3);
+  z-index:10;opacity:0;
   pointer-events:none;
+  transition:none;
 }
-#robot svg{width:80px;height:80px;filter:drop-shadow(0 0 20px rgba(255,255,255,0.15))}
+#robot svg{width:70px;height:70px}
 </style></head><body>
 <div id="W">
   <canvas id="c"></canvas>
   <div id="robot">
     <svg viewBox="-62 -72 124 144" xmlns="http://www.w3.org/2000/svg">
       <polygon points="0,-65 56,-32.5 56,32.5 0,65 -56,32.5 -56,-32.5" 
-               fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linejoin="round"/>
+               fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linejoin="round"/>
       <polyline points="-25,-18 -12,-33 0,-21 12,-33 25,-18" 
-                fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="-15" cy="5" r="5" fill="rgba(255,255,255,0.5)"/>
-      <circle cx="15" cy="5" r="5" fill="rgba(255,255,255,0.5)"/>
-      <circle cx="0" cy="28" r="3" fill="rgba(255,255,255,0.3)"/>
+                fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="-15" cy="5" r="5" fill="rgba(255,255,255,0.6)"/>
+      <circle cx="15" cy="5" r="5" fill="rgba(255,255,255,0.6)"/>
+      <circle cx="0" cy="28" r="3" fill="rgba(255,255,255,0.35)"/>
     </svg>
   </div>
 </div>
@@ -38,66 +39,92 @@ const PPR=2500,AGENTS=5,TOTAL=PPR*AGENTS,spacing=105;
 
 const Wr=document.getElementById('W'),cv=document.getElementById('c'),robotEl=document.getElementById('robot');
 const Re=new THREE.WebGLRenderer({canvas:cv,antialias:true});
-Re.setClearColor(0x050508);Re.setPixelRatio(Math.min(devicePixelRatio,2));
-const sc=new THREE.Scene();sc.fog=new THREE.FogExp2(0x050508,.00055);
-const cam=new THREE.PerspectiveCamera(50,16/9,1,5000);
+Re.setClearColor(0x030305);Re.setPixelRatio(Math.min(devicePixelRatio,2));
+const sc=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(50,16/9,1,8000);
+cam.position.set(0,10,450);
 function rsz(){const w=Wr.clientWidth,h=Wr.clientHeight;Re.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
 rsz();
 
-// Decode targets
+// ── STARS BACKGROUND ──
+const STARS=3000;
+const starGeo=new THREE.BufferGeometry();
+const starPos=new Float32Array(STARS*3);
+const starSz=new Float32Array(STARS);
+const starPh=new Float32Array(STARS);
+for(let i=0;i<STARS;i++){
+  const i3=i*3;
+  starPos[i3]=(Math.random()-.5)*3000;
+  starPos[i3+1]=(Math.random()-.5)*1500;
+  starPos[i3+2]=-200-Math.random()*2500;
+  starSz[i]=.5+Math.random()*2;
+  starPh[i]=Math.random()*6.28;
+}
+starGeo.setAttribute('position',new THREE.BufferAttribute(starPos,3));
+starGeo.setAttribute('size',new THREE.BufferAttribute(starSz,1));
+starGeo.setAttribute('phase',new THREE.BufferAttribute(starPh,1));
+
+const starTex=(()=>{const c=document.createElement('canvas');c.width=32;c.height=32;
+const x=c.getContext('2d'),g=x.createRadialGradient(16,16,0,16,16,16);
+g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.2,'rgba(255,255,255,.5)');
+g.addColorStop(1,'rgba(255,255,255,0)');
+x.fillStyle=g;x.fillRect(0,0,32,32);return new THREE.CanvasTexture(c)})();
+
+sc.add(new THREE.Points(starGeo,new THREE.ShaderMaterial({
+  uniforms:{uTex:{value:starTex},uT:{value:0},uPR:{value:Math.min(devicePixelRatio,2)}},
+  vertexShader:`attribute float size,phase;varying float vA;uniform float uT,uPR;
+    void main(){vec4 mv=modelViewMatrix*vec4(position,1.);float d=-mv.z;
+    vA=(.3+.7*(.5+.5*sin(uT*.8+phase)))*exp(-.0002*d);
+    gl_PointSize=size*uPR*(150./d);gl_PointSize=max(gl_PointSize,.3);
+    gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform sampler2D uTex;varying float vA;
+    void main(){vec4 t=texture2D(uTex,gl_PointCoord);float a=t.a*vA;
+    if(a<.01)discard;gl_FragColor=vec4(vec3(.85,.88,1.),a);}`,
+  transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})));
+
+// ── AGENT PARTICLES ──
 const tgt=new Float32Array(TOTAL*3);
 const nrm=new Float32Array(TOTAL*3);
 for(let a=0;a<AGENTS;a++){
-  const ox=(a-2)*spacing, dOff=a*PPR*3;
+  const ox=(a-2)*spacing,dO=a*PPR*3;
   for(let i=0;i<PPR;i++){
-    const gi=(a*PPR+i)*3, di=dOff+i*3;
-    tgt[gi]=PI[di]*.1+ox; tgt[gi+1]=PI[di+1]*.1; tgt[gi+2]=PI[di+2]*.1;
-    nrm[gi]=NI[di]*.01; nrm[gi+1]=NI[di+1]*.01; nrm[gi+2]=NI[di+2]*.01;
+    const gi=(a*PPR+i)*3,di=dO+i*3;
+    tgt[gi]=PI[di]*.1+ox;tgt[gi+1]=PI[di+1]*.1;tgt[gi+2]=PI[di+2]*.1;
+    nrm[gi]=NI[di]*.01;nrm[gi+1]=NI[di+1]*.01;nrm[gi+2]=NI[di+2]*.01;
   }
 }
 
-// Buffers
 const geo=new THREE.BufferGeometry();
 const pos=new Float32Array(TOTAL*3);
 const col=new Float32Array(TOTAL*3);
 const szA=new Float32Array(TOTAL);
 const ph=new Float32Array(TOTAL);
 const bf=new Float32Array(TOTAL*3);
-const scat=new Float32Array(TOTAL*3);
 
-// Trail data
-const tDir=new Float32Array(TOTAL*3);
-const tLen=new Float32Array(TOTAL);
-const tCrv=new Float32Array(TOTAL*3);
+// Sort particles by agent, then random arrival order within agent
+const arrivalOrder=new Float32Array(TOTAL);
+for(let a=0;a<AGENTS;a++){
+  const indices=[];
+  for(let i=0;i<PPR;i++) indices.push(i);
+  // Shuffle
+  for(let i=indices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[indices[i],indices[j]]=[indices[j],indices[i]]}
+  for(let i=0;i<PPR;i++) arrivalOrder[a*PPR+indices[i]]=i/PPR; // 0-1 normalized order
+}
 
-const agentHues=[0.55, 0.95, 0.12, 0.55, 0.8];
+const agentHues=[0.55,0.95,0.12,0.55,0.8];
 
 for(let i=0;i<TOTAL;i++){
-  const i3=i*3, ag=Math.floor(i/PPR);
-  const sa=Math.random()*6.28,sv=Math.acos(2*Math.random()-1),sr=500+Math.random()*600;
-  scat[i3]=sr*Math.sin(sv)*Math.cos(sa);
-  scat[i3+1]=sr*Math.sin(sv)*Math.sin(sa);
-  scat[i3+2]=sr*Math.cos(sv);
-  pos[i3]=scat[i3];pos[i3+1]=scat[i3+1];pos[i3+2]=scat[i3+2];
+  const i3=i*3,ag=Math.floor(i/PPR);
+  // Start FAR away, scattered in space
+  pos[i3]=(Math.random()-.5)*2000;
+  pos[i3+1]=(Math.random()-.5)*1000;
+  pos[i3+2]=-300-Math.random()*1500;
   
   ph[i]=Math.random()*6.28;
   bf[i3]=.3+Math.random()*.8;bf[i3+1]=.25+Math.random()*.7;bf[i3+2]=.2+Math.random()*.6;
-  szA[i]=1.2+Math.random()*2.5;
+  szA[i]=1+Math.random()*2.5;
 
-  // Trail: along surface normal
-  let nx=nrm[i3],ny=nrm[i3+1],nz=nrm[i3+2];
-  const nl=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
-  tDir[i3]=nx/nl+(Math.random()-.5)*.3;
-  tDir[i3+1]=ny/nl+(Math.random()-.5)*.3;
-  tDir[i3+2]=nz/nl+(Math.random()-.5)*.3;
-  tLen[i]=4+Math.random()*22;
-  if(Math.random()<.08)tLen[i]*=3;
-  tCrv[i3]=(Math.random()-.5)*.012;
-  tCrv[i3+1]=(Math.random()-.5)*.012;
-  tCrv[i3+2]=(Math.random()-.5)*.012;
-
-  // Colors
-  const cr=Math.random(), h=agentHues[ag];
+  const cr=Math.random(),h=agentHues[ag];
   if(cr<.4){
     if(h<.3){col[i3]=.85+Math.random()*.15;col[i3+1]=.7+Math.random()*.2;col[i3+2]=.15+Math.random()*.15}
     else if(h<.65){col[i3]=.1+Math.random()*.12;col[i3+1]=.5+Math.random()*.3;col[i3+2]=.75+Math.random()*.25}
@@ -129,7 +156,7 @@ const ptMat=new THREE.ShaderMaterial({
     uniform float uT,uPR;
     void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);float d=-mv.z;
       float f=sin(uT*1.1+position.x*.007+position.y*.009)*.2+sin(uT*.45+position.y*.011)*.18+.7;
-      vA=exp(-.00045*d)*f;
+      vA=exp(-.0004*d)*f;
       gl_PointSize=size*uPR*(260./d);gl_PointSize=max(gl_PointSize,.5);
       gl_Position=projectionMatrix*mv;}`,
   fragmentShader:`
@@ -139,123 +166,101 @@ const ptMat=new THREE.ShaderMaterial({
   transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
 sc.add(new THREE.Points(geo,ptMat));
 
-// Curved hair trails
-const HSEG=8;
-const hGeo=new THREE.BufferGeometry();
-const hPos=new Float32Array(TOTAL*HSEG*6);
-const hCol=new Float32Array(TOTAL*HSEG*6);
-for(let i=0;i<TOTAL;i++){
-  const i3=i*3;
-  for(let s=0;s<HSEG;s++){
-    const si=(i*HSEG+s)*6;
-    const fade=(1-s/HSEG);
-    hCol[si]=col[i3]*fade;hCol[si+1]=col[i3+1]*fade;hCol[si+2]=col[i3+2]*fade;
-    hCol[si+3]=col[i3]*fade*.2;hCol[si+4]=col[i3+1]*fade*.2;hCol[si+5]=col[i3+2]*fade*.2;
-  }
-}
-hGeo.setAttribute('position',new THREE.BufferAttribute(hPos,3));
-hGeo.setAttribute('color',new THREE.BufferAttribute(hCol,3));
-sc.add(new THREE.LineSegments(hGeo,new THREE.ShaderMaterial({
-  vertexShader:`attribute vec3 color;varying vec3 vC;varying float vA;
-    void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);
-    vA=exp(-.00045*(-mv.z));gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`varying vec3 vC;varying float vA;
-    void main(){float a=length(vC)*vA*.25;if(a<.003)discard;gl_FragColor=vec4(vC,a);}`,
-  transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})));
-
 // ── ANIMATION ──
 const pA=geo.attributes.position.array;
-const hpA=hGeo.attributes.position.array;
+const spA=starGeo.attributes.position.array;
 const easeOut=x=>{x=Math.max(0,Math.min(x,1));return 1-Math.pow(1-x,3)};
-const agentDelay=[0,0.7,1.4,2.1,2.8];
+
+// Agent assembly windows (seconds): each agent gets 3s, staggered by 2.5s
+// Agent 0: 2-5s, Agent 1: 4.5-7.5s, Agent 2: 7-10s, Agent 3: 9.5-12.5s, Agent 4: 12-15s
+const agentStart=[2, 4.5, 7, 9.5, 12];
+const agentDur=3; // each agent takes 3s to fully assemble
 
 const T0=performance.now();
 
 (function loop(){
   requestAnimationFrame(loop);
   const t=(performance.now()-T0)*.001;
-  const ct=t%20; // 20s cycle
 
-  // Timeline:
-  // 0-1.5:   scattered, calm floating
-  // 1.5-7:   sequential assembly (agents enter one by one)
-  // 7-12:    hold shape, slow breathe, gentle rotation
-  // 12-13:   robot icon fades in (particles still holding)
-  // 13-15:   hold with icon visible
-  // 15-16:   icon fades out, dissolve begins
-  // 16-19:   full dissolve
-  // 19-20:   scattered
+  // ── STARS: slow drift ──
+  const starMat=sc.children[0].material;
+  starMat.uniforms.uT.value=t;
+  for(let i=0;i<STARS;i++){
+    const i3=i*3;
+    spA[i3+2]+=.15; // drift toward camera
+    if(spA[i3+2]>200){spA[i3+2]=-2500;spA[i3]=(Math.random()-.5)*3000;spA[i3+1]=(Math.random()-.5)*1500}
+  }
+  starGeo.attributes.position.needsUpdate=true;
 
-  // Robot icon: visible 12-16s, centered, big, clean
-  if(ct>12&&ct<16) robotEl.style.opacity='1';
-  else robotEl.style.opacity='0';
-
+  // ── PARTICLES: bod po bodu assembly ──
   for(let i=0;i<TOTAL;i++){
     const i3=i*3,p=ph[i];
     const ag=Math.floor(i/PPR);
-    const ad=agentDelay[ag];
+    const aStart=agentStart[ag];
+    const arrival=arrivalOrder[i]; // 0-1: when this particle arrives within its agent's window
+
+    // This particle's personal assembly time
+    const myStart=aStart+arrival*agentDur;
+    const myEnd=myStart+.8; // takes 0.8s per particle to settle
 
     let lm;
-    if(ct<1.5) lm=0;
-    else if(ct<7){
-      const at=ct-1.5-ad-p*.1;
-      lm=easeOut(Math.max(0,at/2.8));
-    }else if(ct<15) lm=1;
-    else if(ct<19){
-      const dt=ct-15-(AGENTS-1-ag)*.5-p*.08; // reverse order dissolve
-      lm=1-easeOut(Math.max(0,dt/2.5));
-    }else lm=0;
+    if(t<myStart) lm=0;
+    else if(t<myEnd) lm=easeOut((t-myStart)/.8);
+    else lm=1;
 
-    // Position
-    pA[i3]=scat[i3]+(tgt[i3]-scat[i3])*lm;
-    pA[i3+1]=scat[i3+1]+(tgt[i3+1]-scat[i3+1])*lm;
-    pA[i3+2]=scat[i3+2]+(tgt[i3+2]-scat[i3+2])*lm;
-
-    // Organic drift
-    const amp=1+2.5*(1-lm);
-    pA[i3]+=Math.sin(t*bf[i3]+p)*amp;
-    pA[i3+1]+=Math.sin(t*bf[i3+1]+p*1.3)*amp;
-    pA[i3+2]+=Math.sin(t*bf[i3+2]+p*.9)*amp*.4;
-
-    // Scatter drift when free
-    if(lm<.15){
-      scat[i3]+=Math.sin(t*.07+p)*.1;
-      scat[i3+1]+=Math.cos(t*.05+p*1.3)*.1;
+    // Target with breathing
+    let tx=tgt[i3],ty=tgt[i3+1],tz=tgt[i3+2];
+    if(lm>=1){
+      tx+=Math.sin(t*.4+p)*1;
+      ty+=Math.sin(t*.35+p*1.3)*1;
+      tz+=Math.sin(t*.3+p*.9)*.4;
     }
 
-    // Curved trails
-    const trailScale=lm*(.3+.7*(.5+.5*Math.sin(t*.3+p)));
-    const tl=tLen[i]*trailScale;
-    let cx=pA[i3],cy=pA[i3+1],cz=pA[i3+2];
-    let dx=tDir[i3],dy=tDir[i3+1],dz=tDir[i3+2];
-    const step=tl/HSEG;
-    for(let s=0;s<HSEG;s++){
-      const si=(i*HSEG+s)*6;
-      hpA[si]=cx;hpA[si+1]=cy;hpA[si+2]=cz;
-      dx+=tCrv[i3]*step+Math.sin(t*.25+s*.3+p)*.002*step;
-      dy+=tCrv[i3+1]*step;
-      dz+=tCrv[i3+2]*step;
-      cx+=dx*step;cy+=dy*step;cz+=dz*step;
-      hpA[si+3]=cx;hpA[si+4]=cy;hpA[si+5]=cz;
+    if(lm<=0){
+      // Floating in space — gentle drift
+      pA[i3]+=Math.sin(t*.05+p)*.08;
+      pA[i3+1]+=Math.cos(t*.04+p*1.3)*.08;
+      pA[i3+2]+=.05; // slowly toward camera like stars
+    }else if(lm<1){
+      // Flying toward target
+      pA[i3]+=(tx-pA[i3])*(.02+lm*.08);
+      pA[i3+1]+=(ty-pA[i3+1])*(.02+lm*.08);
+      pA[i3+2]+=(tz-pA[i3+2])*(.02+lm*.08);
+    }else{
+      // Settled — stay near target with breathing
+      pA[i3]+=(tx-pA[i3])*.1;
+      pA[i3+1]+=(ty-pA[i3+1])*.1;
+      pA[i3+2]+=(tz-pA[i3+2])*.1;
     }
   }
   geo.attributes.position.needsUpdate=true;
-  hGeo.attributes.position.needsUpdate=true;
 
-  // Camera: SLOW, cinematic, premium — no sudden moves
-  const camT=ct/20; // 0-1 normalized
-  // Gentle arc from slightly left to slightly right, very slow zoom
-  const camAngle=Math.sin(camT*Math.PI*2)*.08; // tiny horizontal sweep
-  const camDist=420-Math.sin(camT*Math.PI)*.25*40; // barely perceptible zoom
-  const camY=15+Math.sin(t*.03)*5;
-  cam.position.x=Math.sin(camAngle)*camDist+Math.sin(t*.04)*8;
-  cam.position.z=Math.cos(camAngle)*camDist;
-  cam.position.y=camY;
+  // ── ROBOT ICON: flies in from distance at the end ──
+  // Assembly finishes at ~15s. Robot appears 16-20s.
+  const robotStart=16;
+  const robotSettle=18.5; // fully settled
+  if(t>robotStart){
+    const rp=Math.min((t-robotStart)/(robotSettle-robotStart),1);
+    const re=easeOut(rp);
+    // Start from scale(3) far away, end at scale(1) centered
+    const sc_val=1+2*(1-re);
+    const opacity=Math.min(re*1.5,1);
+    robotEl.style.opacity=opacity;
+    robotEl.style.transform=`translate(-50%,-50%) scale(${sc_val})`;
+    robotEl.style.filter=`drop-shadow(0 0 ${20*re}px rgba(255,255,255,${.15*re}))`;
+  }else{
+    robotEl.style.opacity='0';
+  }
+
+  // ── CAMERA: very slow cinematic ──
+  const camX=Math.sin(t*.025)*15;
+  const camY=10+Math.sin(t*.02)*5;
+  const camZ=450-Math.min(t/20,1)*30;
+  cam.position.set(camX,camY,camZ);
   cam.lookAt(0,-5,0);
 
-  // Very subtle group rotation
-  const gr=Math.sin(t*.04)*.06;
-  sc.children.forEach(c=>c.rotation.y=gr);
+  // Subtle rotation
+  sc.children.forEach(c=>{if(c.type==='Points'&&c!==sc.children[0])c.rotation.y=Math.sin(t*.03)*.05});
 
   ptMat.uniforms.uT.value=t;
   Re.render(sc,cam);
