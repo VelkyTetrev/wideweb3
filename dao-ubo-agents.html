@@ -19,7 +19,7 @@ const PPR=2500,AGENTS=5,TOTAL=PPR*AGENTS,spacing=105;
 const Wr=document.getElementById('W'),cv=document.getElementById('c');
 const Re=new THREE.WebGLRenderer({canvas:cv,antialias:true});
 Re.setClearColor(0x050508);Re.setPixelRatio(Math.min(devicePixelRatio,2));
-const sc=new THREE.Scene();sc.fog=new THREE.FogExp2(0x050508,.00055);
+const sc=new THREE.Scene();sc.fog=new THREE.FogExp2(0x050508,.00025);
 const cam=new THREE.PerspectiveCamera(50,16/9,1,5000);
 function rsz(){const w=Wr.clientWidth,h=Wr.clientHeight;Re.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
 rsz();
@@ -49,7 +49,7 @@ for(let i=0;i<TOTAL;i++){
   pos[i3]=scat[i3];pos[i3+1]=scat[i3+1];pos[i3+2]=scat[i3+2];
   ph[i]=Math.random()*6.28;
   bf[i3]=.3+Math.random()*.8;bf[i3+1]=.25+Math.random()*.7;bf[i3+2]=.2+Math.random()*.6;
-  szA[i]=1.2+Math.random()*2.5;
+  szA[i]=2.5+Math.random()*5;
   let nx=nrm[i3],ny=nrm[i3+1],nz=nrm[i3+2];
   const nl=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
   tDir[i3]=nx/nl+(Math.random()-.5)*.3;tDir[i3+1]=ny/nl+(Math.random()-.5)*.3;tDir[i3+2]=nz/nl+(Math.random()-.5)*.3;
@@ -58,10 +58,10 @@ for(let i=0;i<TOTAL;i++){
   const cr=Math.random(),h=agentHues[ag];
   if(cr<.4){
     if(h<.3){col[i3]=.85+Math.random()*.15;col[i3+1]=.7+Math.random()*.2;col[i3+2]=.15+Math.random()*.15}
-    else if(h<.65){col[i3]=.1+Math.random()*.12;col[i3+1]=.5+Math.random()*.3;col[i3+2]=.75+Math.random()*.25}
-    else{col[i3]=.7+Math.random()*.3;col[i3+1]=.08+Math.random()*.15;col[i3+2]=.2+Math.random()*.3}
-  }else if(cr<.65){col[i3]=.12+Math.random()*.12;col[i3+1]=.5+Math.random()*.3;col[i3+2]=.75+Math.random()*.25}
-  else if(cr<.82){col[i3]=.7+Math.random()*.3;col[i3+1]=.08+Math.random()*.15;col[i3+2]=.15+Math.random()*.25}
+    else if(h<.65){col[i3]=.2+Math.random()*.15;col[i3+1]=.6+Math.random()*.3;col[i3+2]=.85+Math.random()*.15}
+    else{col[i3]=.85+Math.random()*.15;col[i3+1]=.15+Math.random()*.2;col[i3+2]=.3+Math.random()*.25}
+  }else if(cr<.65){col[i3]=.25+Math.random()*.15;col[i3+1]=.65+Math.random()*.25;col[i3+2]=.88+Math.random()*.12}
+  else if(cr<.82){col[i3]=.8+Math.random()*.2;col[i3+1]=.15+Math.random()*.2;col[i3+2]=.25+Math.random()*.25}
   else{col[i3]=.92+Math.random()*.08;col[i3+1]=.88+Math.random()*.12;col[i3+2]=.82+Math.random()*.18}
 }
 geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
@@ -80,12 +80,12 @@ const ptMat=new THREE.ShaderMaterial({
     uniform float uT,uPR;
     void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);float d=-mv.z;
     float f=sin(uT*1.1+position.x*.007+position.y*.009)*.2+sin(uT*.45+position.y*.011)*.18+.7;
-    vA=exp(-.00045*d)*f;
-    gl_PointSize=size*uPR*(260./d);gl_PointSize=max(gl_PointSize,.5);
+    vA=exp(-.00025*d)*f;
+    gl_PointSize=size*uPR*(350./d);gl_PointSize=max(gl_PointSize,.5);
     gl_Position=projectionMatrix*mv;}`,
   fragmentShader:`uniform sampler2D uTex;varying vec3 vC;varying float vA;
     void main(){vec4 t=texture2D(uTex,gl_PointCoord);float a=t.a*vA;
-    if(a<.005)discard;gl_FragColor=vec4(vC*(.5+.65*t.r),a);}`,
+    if(a<.002)discard;gl_FragColor=vec4(vC*(.7+.8*t.r),a);}`,
   transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
 sc.add(new THREE.Points(geo,ptMat));
 
@@ -101,7 +101,7 @@ sc.add(new THREE.LineSegments(hGeo,new THREE.ShaderMaterial({
     void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);
     vA=exp(-.00045*(-mv.z));gl_Position=projectionMatrix*mv;}`,
   fragmentShader:`varying vec3 vC;varying float vA;
-    void main(){float a=length(vC)*vA*.25;if(a<.003)discard;gl_FragColor=vec4(vC,a);}`,
+    void main(){float a=length(vC)*vA*.45;if(a<.003)discard;gl_FragColor=vec4(vC,a);}`,
   transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})));
 
 // ── STARS: always visible, flying past ──
@@ -244,7 +244,7 @@ const T0=performance.now();
   // Camera
   cam.position.x=Math.sin(t*.025)*12;
   cam.position.y=10+Math.sin(t*.02)*4;
-  cam.position.z=420;
+  cam.position.z=320;
   cam.lookAt(0,-5,0);
   sc.children.forEach(c=>c.rotation.y=Math.sin(t*.03)*.04);
   ptMat.uniforms.uT.value=t;
