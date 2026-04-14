@@ -9,9 +9,8 @@ body{background:#050508;overflow:hidden;height:100vh}
 canvas{display:block;width:100%;height:100%}
 #robot{
   position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(0.5);
-  z-index:10;opacity:0;
-  pointer-events:none;
+  transform:translate(-50%,-50%) scale(0.3);
+  z-index:10;opacity:0;pointer-events:none;
 }
 #robot svg{width:80px;height:80px}
 </style></head><body>
@@ -20,12 +19,12 @@ canvas{display:block;width:100%;height:100%}
   <div id="robot">
     <svg viewBox="-62 -72 124 144" xmlns="http://www.w3.org/2000/svg">
       <polygon points="0,-65 56,-32.5 56,32.5 0,65 -56,32.5 -56,-32.5" 
-               fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linejoin="round"/>
+               fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" opacity="0.55"/>
       <polyline points="-25,-18 -12,-33 0,-21 12,-33 25,-18" 
-                fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="-15" cy="5" r="5" fill="rgba(255,255,255,0.6)"/>
-      <circle cx="15" cy="5" r="5" fill="rgba(255,255,255,0.6)"/>
-      <circle cx="0" cy="28" r="3" fill="rgba(255,255,255,0.35)"/>
+                fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+      <circle cx="-15" cy="5" r="5" fill="#ffffff" opacity="0.65"/>
+      <circle cx="15" cy="5" r="5" fill="#ffffff" opacity="0.65"/>
+      <circle cx="0" cy="28" r="3" fill="#ffffff" opacity="0.35"/>
     </svg>
   </div>
 </div>
@@ -44,9 +43,7 @@ const cam=new THREE.PerspectiveCamera(50,16/9,1,5000);
 function rsz(){const w=Wr.clientWidth,h=Wr.clientHeight;Re.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
 rsz();
 
-// Decode targets
-const tgt=new Float32Array(TOTAL*3);
-const nrm=new Float32Array(TOTAL*3);
+const tgt=new Float32Array(TOTAL*3),nrm=new Float32Array(TOTAL*3);
 for(let a=0;a<AGENTS;a++){
   const ox=(a-2)*spacing,dO=a*PPR*3;
   for(let i=0;i<PPR;i++){
@@ -56,59 +53,35 @@ for(let a=0;a<AGENTS;a++){
   }
 }
 
-// Buffers
 const geo=new THREE.BufferGeometry();
-const pos=new Float32Array(TOTAL*3);
-const col=new Float32Array(TOTAL*3);
-const szA=new Float32Array(TOTAL);
-const ph=new Float32Array(TOTAL);
-const bf=new Float32Array(TOTAL*3);
+const pos=new Float32Array(TOTAL*3),col=new Float32Array(TOTAL*3);
+const szA=new Float32Array(TOTAL),ph=new Float32Array(TOTAL),bf=new Float32Array(TOTAL*3);
 const scat=new Float32Array(TOTAL*3);
-
-// Trail data
-const tDir=new Float32Array(TOTAL*3);
-const tLen=new Float32Array(TOTAL);
-const tCrv=new Float32Array(TOTAL*3);
-
+const tDir=new Float32Array(TOTAL*3),tLen=new Float32Array(TOTAL),tCrv=new Float32Array(TOTAL*3);
 const agentHues=[0.55,0.95,0.12,0.55,0.8];
 
 for(let i=0;i<TOTAL;i++){
   const i3=i*3,ag=Math.floor(i/PPR);
   const sa=Math.random()*6.28,sv=Math.acos(2*Math.random()-1),sr=500+Math.random()*600;
-  scat[i3]=sr*Math.sin(sv)*Math.cos(sa);
-  scat[i3+1]=sr*Math.sin(sv)*Math.sin(sa);
-  scat[i3+2]=sr*Math.cos(sv);
+  scat[i3]=sr*Math.sin(sv)*Math.cos(sa);scat[i3+1]=sr*Math.sin(sv)*Math.sin(sa);scat[i3+2]=sr*Math.cos(sv);
   pos[i3]=scat[i3];pos[i3+1]=scat[i3+1];pos[i3+2]=scat[i3+2];
-  
   ph[i]=Math.random()*6.28;
   bf[i3]=.3+Math.random()*.8;bf[i3+1]=.25+Math.random()*.7;bf[i3+2]=.2+Math.random()*.6;
   szA[i]=1.2+Math.random()*2.5;
-
   let nx=nrm[i3],ny=nrm[i3+1],nz=nrm[i3+2];
   const nl=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
-  tDir[i3]=nx/nl+(Math.random()-.5)*.3;
-  tDir[i3+1]=ny/nl+(Math.random()-.5)*.3;
-  tDir[i3+2]=nz/nl+(Math.random()-.5)*.3;
-  tLen[i]=4+Math.random()*22;
-  if(Math.random()<.08)tLen[i]*=3;
-  tCrv[i3]=(Math.random()-.5)*.012;
-  tCrv[i3+1]=(Math.random()-.5)*.012;
-  tCrv[i3+2]=(Math.random()-.5)*.012;
-
+  tDir[i3]=nx/nl+(Math.random()-.5)*.3;tDir[i3+1]=ny/nl+(Math.random()-.5)*.3;tDir[i3+2]=nz/nl+(Math.random()-.5)*.3;
+  tLen[i]=4+Math.random()*22;if(Math.random()<.08)tLen[i]*=3;
+  tCrv[i3]=(Math.random()-.5)*.012;tCrv[i3+1]=(Math.random()-.5)*.012;tCrv[i3+2]=(Math.random()-.5)*.012;
   const cr=Math.random(),h=agentHues[ag];
   if(cr<.4){
     if(h<.3){col[i3]=.85+Math.random()*.15;col[i3+1]=.7+Math.random()*.2;col[i3+2]=.15+Math.random()*.15}
     else if(h<.65){col[i3]=.1+Math.random()*.12;col[i3+1]=.5+Math.random()*.3;col[i3+2]=.75+Math.random()*.25}
     else{col[i3]=.7+Math.random()*.3;col[i3+1]=.08+Math.random()*.15;col[i3+2]=.2+Math.random()*.3}
-  }else if(cr<.65){
-    col[i3]=.12+Math.random()*.12;col[i3+1]=.5+Math.random()*.3;col[i3+2]=.75+Math.random()*.25;
-  }else if(cr<.82){
-    col[i3]=.7+Math.random()*.3;col[i3+1]=.08+Math.random()*.15;col[i3+2]=.15+Math.random()*.25;
-  }else{
-    col[i3]=.92+Math.random()*.08;col[i3+1]=.88+Math.random()*.12;col[i3+2]=.82+Math.random()*.18;
-  }
+  }else if(cr<.65){col[i3]=.12+Math.random()*.12;col[i3+1]=.5+Math.random()*.3;col[i3+2]=.75+Math.random()*.25}
+  else if(cr<.82){col[i3]=.7+Math.random()*.3;col[i3+1]=.08+Math.random()*.15;col[i3+2]=.15+Math.random()*.25}
+  else{col[i3]=.92+Math.random()*.08;col[i3+1]=.88+Math.random()*.12;col[i3+2]=.82+Math.random()*.18}
 }
-
 geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
 geo.setAttribute('color',new THREE.BufferAttribute(col,3));
 geo.setAttribute('size',new THREE.BufferAttribute(szA,1));
@@ -120,40 +93,28 @@ g.addColorStop(.3,'rgba(255,255,255,.22)');g.addColorStop(1,'rgba(255,255,255,0)
 x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
 
 const ptMat=new THREE.ShaderMaterial({
-  uniforms:{uTex:{value:tex},uT:{value:0},uPR:{value:Math.min(devicePixelRatio,2)},uFade:{value:1.0}},
-  vertexShader:`
-    attribute float size;attribute vec3 color;
-    varying vec3 vC;varying float vA;
+  uniforms:{uTex:{value:tex},uT:{value:0},uPR:{value:Math.min(devicePixelRatio,2)},uFade:{value:1}},
+  vertexShader:`attribute float size;attribute vec3 color;varying vec3 vC;varying float vA;
     uniform float uT,uPR,uFade;
     void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);float d=-mv.z;
-      float f=sin(uT*1.1+position.x*.007+position.y*.009)*.2+sin(uT*.45+position.y*.011)*.18+.7;
-      vA=exp(-.00045*d)*f*uFade;
-      gl_PointSize=size*uPR*(260./d);gl_PointSize=max(gl_PointSize,.5);
-      gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`
-    uniform sampler2D uTex;varying vec3 vC;varying float vA;
+    float f=sin(uT*1.1+position.x*.007+position.y*.009)*.2+sin(uT*.45+position.y*.011)*.18+.7;
+    vA=exp(-.00045*d)*f*uFade;
+    gl_PointSize=size*uPR*(260./d);gl_PointSize=max(gl_PointSize,.5);
+    gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform sampler2D uTex;varying vec3 vC;varying float vA;
     void main(){vec4 t=texture2D(uTex,gl_PointCoord);float a=t.a*vA;
     if(a<.005)discard;gl_FragColor=vec4(vC*(.5+.65*t.r),a);}`,
   transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
 sc.add(new THREE.Points(geo,ptMat));
 
-// Curved hair trails
-const HSEG=8;
-const hGeo=new THREE.BufferGeometry();
-const hPos=new Float32Array(TOTAL*HSEG*6);
-const hCol=new Float32Array(TOTAL*HSEG*6);
-for(let i=0;i<TOTAL;i++){
-  const i3=i*3;
-  for(let s=0;s<HSEG;s++){
-    const si=(i*HSEG+s)*6,fade=(1-s/HSEG);
-    hCol[si]=col[i3]*fade;hCol[si+1]=col[i3+1]*fade;hCol[si+2]=col[i3+2]*fade;
-    hCol[si+3]=col[i3]*fade*.2;hCol[si+4]=col[i3+1]*fade*.2;hCol[si+5]=col[i3+2]*fade*.2;
-  }
-}
+// Curved trails
+const HSEG=8,hGeo=new THREE.BufferGeometry(),hPos=new Float32Array(TOTAL*HSEG*6),hCol=new Float32Array(TOTAL*HSEG*6);
+for(let i=0;i<TOTAL;i++){const i3=i*3;for(let s=0;s<HSEG;s++){const si=(i*HSEG+s)*6,fade=1-s/HSEG;
+  hCol[si]=col[i3]*fade;hCol[si+1]=col[i3+1]*fade;hCol[si+2]=col[i3+2]*fade;
+  hCol[si+3]=col[i3]*fade*.2;hCol[si+4]=col[i3+1]*fade*.2;hCol[si+5]=col[i3+2]*fade*.2;}}
 hGeo.setAttribute('position',new THREE.BufferAttribute(hPos,3));
 hGeo.setAttribute('color',new THREE.BufferAttribute(hCol,3));
-const hMat=new THREE.ShaderMaterial({
-  uniforms:{uFade:{value:1.0}},
+const hMat=new THREE.ShaderMaterial({uniforms:{uFade:{value:1}},
   vertexShader:`attribute vec3 color;varying vec3 vC;varying float vA;uniform float uFade;
     void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);
     vA=exp(-.00045*(-mv.z))*uFade;gl_Position=projectionMatrix*mv;}`,
@@ -162,111 +123,155 @@ const hMat=new THREE.ShaderMaterial({
   transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
 sc.add(new THREE.LineSegments(hGeo,hMat));
 
+// ── ORBITAL LIGHT STREAKS ──
+// Energy rings orbiting around the agent group — visible when agents are formed
+const ORB_N=60; // number of streak particles
+const ORB_SEGS=20; // trail length per streak
+const orbGeo=new THREE.BufferGeometry();
+const orbPos=new Float32Array(ORB_N*ORB_SEGS*6);
+const orbCol=new Float32Array(ORB_N*ORB_SEGS*6);
+// Each streak orbits at different radius, tilt, speed
+const orbR=new Float32Array(ORB_N),orbTilt=new Float32Array(ORB_N);
+const orbSpeed=new Float32Array(ORB_N),orbAngle=new Float32Array(ORB_N);
+const orbY=new Float32Array(ORB_N);
+for(let i=0;i<ORB_N;i++){
+  orbR[i]=180+Math.random()*200;
+  orbTilt[i]=(Math.random()-.5)*1.2;
+  orbSpeed[i]=(.3+Math.random()*.8)*(Math.random()<.5?1:-1);
+  orbAngle[i]=Math.random()*6.28;
+  orbY[i]=(Math.random()-.5)*80;
+  // Color: mix of cyan and white
+  const bright=.3+Math.random()*.7;
+  for(let s=0;s<ORB_SEGS;s++){
+    const si=(i*ORB_SEGS+s)*6;
+    const fade=1-s/ORB_SEGS;
+    const f=fade*bright;
+    // Cyan-white
+    orbCol[si]=(.4+.6*fade)*f;orbCol[si+1]=(.7+.3*fade)*f;orbCol[si+2]=f;
+    orbCol[si+3]=(.4+.6*fade)*f*.15;orbCol[si+4]=(.7+.3*fade)*f*.15;orbCol[si+5]=f*.15;
+  }
+}
+orbGeo.setAttribute('position',new THREE.BufferAttribute(orbPos,3));
+orbGeo.setAttribute('color',new THREE.BufferAttribute(orbCol,3));
+const orbMat=new THREE.ShaderMaterial({uniforms:{uFade:{value:0}},
+  vertexShader:`attribute vec3 color;varying vec3 vC;varying float vA;uniform float uFade;
+    void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);
+    vA=exp(-.00045*(-mv.z))*uFade;gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`varying vec3 vC;varying float vA;
+    void main(){float a=length(vC)*vA*.5;if(a<.003)discard;gl_FragColor=vec4(vC,a);}`,
+  transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+sc.add(new THREE.LineSegments(orbGeo,orbMat));
+
 // ── ANIMATION ──
 const pA=geo.attributes.position.array;
 const hpA=hGeo.attributes.position.array;
+const opA=orbGeo.attributes.position.array;
 const easeOut=x=>{x=Math.max(0,Math.min(x,1));return 1-Math.pow(1-x,3)};
 const agentDelay=[0,0.7,1.4,2.1,2.8];
-
 const T0=performance.now();
 
-// Timeline (20s loop):
-// 0-1.5:   scattered floating
-// 1.5-7:   sequential assembly
-// 7-13:    hold + breathe
-// 13-15:   particles fade to black
-// 15-18.5: black screen, robot fades in from small→normal
-// 18.5-20: robot holds, then fade out for loop
+// 20s loop:
+// 0-1.5:  scattered
+// 1.5-7:  assembly
+// 7-12:   hold + orbital streaks active
+// 12-13.5: fade to black
+// 13.5-17: black + robot enters
+// 17-18.5: robot holds sharp
+// 18.5-20: robot fades, particles fade back
 
 (function loop(){
   requestAnimationFrame(loop);
   const t=(performance.now()-T0)*.001;
   const ct=t%20;
 
-  // ── PARTICLE FADE ──
-  // Full visibility 0-13, fade out 13-15, invisible 15-20
-  let particleFade;
-  if(ct<13) particleFade=1;
-  else if(ct<15) particleFade=1-easeOut((ct-13)/2);
-  else if(ct<19.5) particleFade=0;
-  else particleFade=easeOut((ct-19.5)/.5); // fade back in for loop restart
-  
-  ptMat.uniforms.uFade.value=particleFade;
-  hMat.uniforms.uFade.value=particleFade;
+  // Particle fade
+  let pFade;
+  if(ct<12) pFade=1;
+  else if(ct<13.5) pFade=1-easeOut((ct-12)/1.5);
+  else if(ct<18.5) pFade=0;
+  else pFade=easeOut((ct-18.5)/1.5);
+  ptMat.uniforms.uFade.value=pFade;
+  hMat.uniforms.uFade.value=pFade;
 
-  // ── ROBOT ICON ──
-  if(ct>15.5&&ct<19){
-    const rp=Math.min((ct-15.5)/2,1);
-    const re=easeOut(rp);
-    const s=.5+.5*re; // scale .5 → 1
-    robotEl.style.opacity=re;
-    robotEl.style.transform='translate(-50%,-50%) scale('+s+')';
-    robotEl.style.filter='drop-shadow(0 0 '+Math.round(20*re)+'px rgba(255,255,255,'+(.15*re).toFixed(2)+'))';
-  }else if(ct>=19){
-    const fadeOut=1-easeOut((ct-19)/1);
-    robotEl.style.opacity=Math.max(0,fadeOut);
+  // Orbital streaks: visible during hold (7-13.5)
+  let orbFade;
+  if(ct<7) orbFade=easeOut(Math.max(0,(ct-5)/2)); // start fading in from 5s
+  else if(ct<12) orbFade=1;
+  else if(ct<13.5) orbFade=1-easeOut((ct-12)/1.5);
+  else orbFade=0;
+  orbMat.uniforms.uFade.value=orbFade;
+
+  // Robot: 13.5-18.5
+  if(ct>14&&ct<18.5){
+    const rp=easeOut(Math.min((ct-14)/1.5,1));
+    robotEl.style.opacity=rp;
+    robotEl.style.transform='translate(-50%,-50%) scale('+(0.3+0.7*rp)+')';
+    robotEl.style.filter='drop-shadow(0 0 '+Math.round(15*rp)+'px rgba(255,255,255,'+(.12*rp).toFixed(2)+'))';
+  }else if(ct>=18.5&&ct<20){
+    const fo=1-easeOut((ct-18.5)/1);
+    robotEl.style.opacity=Math.max(0,fo);
   }else{
     robotEl.style.opacity='0';
   }
 
-  // ── PARTICLES ──
+  // Particles
   for(let i=0;i<TOTAL;i++){
-    const i3=i*3,p=ph[i];
-    const ag=Math.floor(i/PPR);
-    const ad=agentDelay[ag];
-
-    // Morph: staggered per agent + per particle
+    const i3=i*3,p=ph[i],ag=Math.floor(i/PPR),ad=agentDelay[ag];
     let lm;
-    if(ct<1.5) lm=0;
-    else if(ct<7){
-      const at=ct-1.5-ad-p*.12;
-      lm=easeOut(Math.max(0,at/2.8));
-    }else if(ct<15) lm=1;
-    else lm=1; // stay formed even while fading (cleaner dissolve)
-
-    // Position
+    if(ct<1.5)lm=0;
+    else if(ct<7){const at=ct-1.5-ad-p*.12;lm=easeOut(Math.max(0,at/2.8))}
+    else lm=1;
     pA[i3]=scat[i3]+(tgt[i3]-scat[i3])*lm;
     pA[i3+1]=scat[i3+1]+(tgt[i3+1]-scat[i3+1])*lm;
     pA[i3+2]=scat[i3+2]+(tgt[i3+2]-scat[i3+2])*lm;
-
-    // Organic drift
     const amp=1+2.5*(1-lm);
     pA[i3]+=Math.sin(t*bf[i3]+p)*amp;
     pA[i3+1]+=Math.sin(t*bf[i3+1]+p*1.3)*amp;
     pA[i3+2]+=Math.sin(t*bf[i3+2]+p*.9)*amp*.4;
-
-    if(lm<.15){
-      scat[i3]+=Math.sin(t*.07+p)*.1;
-      scat[i3+1]+=Math.cos(t*.05+p*1.3)*.1;
-    }
-
-    // Curved trails
+    if(lm<.15){scat[i3]+=Math.sin(t*.07+p)*.1;scat[i3+1]+=Math.cos(t*.05+p*1.3)*.1}
     const trailScale=lm*(.3+.7*(.5+.5*Math.sin(t*.3+p)));
     const tl=tLen[i]*trailScale;
     let cx=pA[i3],cy=pA[i3+1],cz=pA[i3+2];
     let dx=tDir[i3],dy=tDir[i3+1],dz=tDir[i3+2];
     const step=tl/HSEG;
-    for(let s=0;s<HSEG;s++){
-      const si=(i*HSEG+s)*6;
+    for(let s=0;s<HSEG;s++){const si=(i*HSEG+s)*6;
       hpA[si]=cx;hpA[si+1]=cy;hpA[si+2]=cz;
       dx+=tCrv[i3]*step+Math.sin(t*.25+s*.3+p)*.002*step;
       dy+=tCrv[i3+1]*step;dz+=tCrv[i3+2]*step;
       cx+=dx*step;cy+=dy*step;cz+=dz*step;
-      hpA[si+3]=cx;hpA[si+4]=cy;hpA[si+5]=cz;
-    }
+      hpA[si+3]=cx;hpA[si+4]=cy;hpA[si+5]=cz;}
   }
   geo.attributes.position.needsUpdate=true;
   hGeo.attributes.position.needsUpdate=true;
 
-  // ── CAMERA: steady, no jumps ──
+  // ── UPDATE ORBITAL STREAKS ──
+  for(let i=0;i<ORB_N;i++){
+    orbAngle[i]+=orbSpeed[i]*.016;
+    // Current position on orbit
+    const a=orbAngle[i];
+    const cx=Math.cos(a)*orbR[i];
+    const cy=orbY[i]+Math.sin(a*1.3)*20;
+    const cz=Math.sin(a)*orbR[i]*Math.cos(orbTilt[i]);
+    // Build trail: previous positions
+    for(let s=ORB_SEGS-1;s>0;s--){
+      const si=(i*ORB_SEGS+s)*6;
+      const pi=(i*ORB_SEGS+s-1)*6;
+      opA[si]=opA[pi];opA[si+1]=opA[pi+1];opA[si+2]=opA[pi+2];
+      opA[si+3]=opA[si];opA[si+4]=opA[si+1];opA[si+5]=opA[si+2];
+    }
+    // New head position
+    const si=i*ORB_SEGS*6;
+    opA[si+3]=opA[si]||cx;opA[si+4]=opA[si+1]||cy;opA[si+5]=opA[si+2]||cz;
+    opA[si]=cx;opA[si+1]=cy;opA[si+2]=cz;
+  }
+  orbGeo.attributes.position.needsUpdate=true;
+
+  // Camera
   cam.position.x=Math.sin(t*.025)*12;
   cam.position.y=10+Math.sin(t*.02)*4;
   cam.position.z=420;
   cam.lookAt(0,-5,0);
-
-  // Subtle rotation
   sc.children.forEach(c=>c.rotation.y=Math.sin(t*.03)*.04);
-
   ptMat.uniforms.uT.value=t;
   Re.render(sc,cam);
 })();
